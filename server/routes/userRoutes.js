@@ -2,7 +2,12 @@ const express = require('express');
 
 const router = express.Router();
 
-const userController = require('./../controllers/userController')
+const userController = require('./../controllers/userController');
+
+// router.param('id', (req, res, next, val) => {
+//   console.log(`User is id ${val}`);
+//   next();
+// })
 
 router
   .route('/')
