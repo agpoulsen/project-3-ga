@@ -1,10 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 
 const AppError = require('./util/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -33,6 +34,12 @@ app.use('/api', limiter);
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb'}));
+
+// Data Sanitisation against NoSQL query injection
+app.use(mongoSanitize());
+
+// Data Sanitisation against XSS
+app.use(xss());
 
 // DATABASE CONNECTION:
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
