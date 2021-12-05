@@ -3,6 +3,8 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 const AppError = require('./util/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -10,12 +12,27 @@ const userRouter = require('./routes/userRoutes');
 
 const app = express();
 
-// MIDDLEWARE STACK:
+// GLOBAL MIDDLEWARE STACK:
+
+// Set Security HTTP headers:
+app.use(helmet());
+
+// Development logging
 if(process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-app.use(express.json());
+// Limit requests from same IP address
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000, // 1 hour
+  message: 'Too many requests from this IP address, please try again in 1 hour'
+});
+
+app.use('/api', limiter);
+
+// Body parser, reading data from body into req.body
+app.use(express.json({ limit: '10kb'}));
 
 // DATABASE CONNECTION:
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
