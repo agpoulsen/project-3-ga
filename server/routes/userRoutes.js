@@ -36,6 +36,15 @@ router
 
 router
   .route('/:userId/touchpoints/:touchpointId')
+  .get(
+    authController.protect,
+    touchpointController.getSingleTouchpoint
+  )
+  .patch(
+    authController.protect,
+    authController.restrictTo('user'),
+    touchpointController.updateTouchpoint
+  )
   .delete(
     authController.protect,
     authController.restrictTo('user'),

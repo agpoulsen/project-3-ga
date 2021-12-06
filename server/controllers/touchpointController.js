@@ -42,6 +42,48 @@ exports.getUsersTouchpoints = catchAsync( async (req, res, next) => {
   });
 });
 
+exports.getSingleTouchpoint = catchAsync( async (req, res, next) => {
+
+  const touchpoint = await Touchpoint.findById(req.params.touchpointId);
+
+  res.status(201).json({
+    status: 'success',
+    data: {
+      touchpoint
+    }
+  });
+});
+
+exports.updateTouchpoint = catchAsync( async (req, res, next) => {
+  const touchpoint = await Touchpoint.findByIdAndUpdate(req.params.touchpointId, req.body, {
+    new: true,
+    runValidators: true
+  });
+
+  if (!touchpoint) {
+    return next( new AppError('No tour found with that ID', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      touchpoint
+    }
+  });
+});
+
 exports.deleteTouchpoint = catchAsync( async (req, res, next) => {
-  //TODO: this function
-})
+
+  console.log(req);
+
+  const touchpoint = await Touchpoint.findByIdAndDelete(req.params.touchpointId);
+
+  if(!touchpoint) {
+    return next( new AppError('No touchpoint found with that ID', 404));
+  }
+
+  res.status(204).json({
+    status: 'success',
+    data: null
+  });
+});
