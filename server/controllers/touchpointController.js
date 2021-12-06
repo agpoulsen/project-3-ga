@@ -1,4 +1,5 @@
 const Touchpoint = require('./../models/touchpointModel');
+const User = require('./../models/userModel');
 const catchAsync = require('./../util/catchAsync');
 const AppError = require('./../util/appError');
 
@@ -28,3 +29,19 @@ exports.createTouchpoint = catchAsync( async (req, res, next) => {
     }
   });
 });
+
+exports.getUsersTouchpoints = catchAsync( async (req, res, next) => {
+
+  const userTouchpoints = await Touchpoint.find( {user: req.user.id} );
+
+  res.status(201).json({
+    status: 'success',
+    data: {
+      userTouchpoints
+    }
+  });
+});
+
+exports.deleteTouchpoint = catchAsync( async (req, res, next) => {
+  //TODO: this function
+})

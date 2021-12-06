@@ -24,10 +24,22 @@ router
 
 router
   .route('/:userId/touchpoints')
+  .get(
+    authController.protect,
+    touchpointController.getUsersTouchpoints
+  )
   .post(
     authController.protect,
     authController.restrictTo('user'),
     touchpointController.createTouchpoint
+  );
+
+router
+  .route('/:userId/touchpoints/:touchpointId')
+  .delete(
+    authController.protect,
+    authController.restrictTo('user'),
+    touchpointController.deleteTouchpoint
   );
 
 module.exports = router;
