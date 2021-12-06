@@ -1,17 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import App from './components/App';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+import { HashRouter as Router, Route } from 'react-router-dom';
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+import Home from './components/Home';
+import LoginForm from './components/LoginForm';
+import SignupForm from './components/SignupForm';
+
+const routes = (
+  <Router>
+    <Route exact path='/' component={ Home }/>
+    <Route path='/login' component={ LoginForm }/>
+    <Route path='/signup' component={ SignupForm }/>
+    <Route />
+  </Router>
+)
+
+ReactDOM.render(routes, document.getElementById('root'));
