@@ -1,6 +1,7 @@
 const express = require('express');
 const userController = require('./../controllers/userController');
 const authController = require('./../controllers/authController');
+const touchpointController = require('./../controllers/touchpointController');
 
 const router = express.Router();
 
@@ -20,5 +21,13 @@ router
   .get(userController.getUser)
   .patch(userController.updateUser)
   .delete(userController.deleteUser);
+
+router
+  .route('/:userId/touchpoints')
+  .post(
+    authController.protect,
+    authController.restrictTo('user'),
+    touchpointController.createTouchpoint
+  );
 
 module.exports = router;

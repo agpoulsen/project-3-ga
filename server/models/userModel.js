@@ -37,6 +37,12 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords are not the same'
     }
   },
+  touchpoints: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Touchpoint'
+    }
+  ],
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
@@ -45,7 +51,7 @@ const userSchema = new mongoose.Schema({
     default: true,
     select: false
   }
-});
+}, {timestamps: true});
 
 userSchema.pre('save', async function(next) {
   // Only run this function if the password was modified
@@ -59,11 +65,12 @@ userSchema.pre('save', async function(next) {
   next();
 });
 
+// When a user is set to active: false - they do not show up in 'Find'
 userSchema.pre(/^find/, function(next) {
   // 'this' points to current query
   this.find( {active: { $ne: false } });
   next();
-})
+});
 
 userSchema.methods.correctPassword = async function(
   candidatePassword,

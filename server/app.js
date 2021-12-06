@@ -10,6 +10,7 @@ const xss = require('xss-clean');
 const AppError = require('./util/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const userRouter = require('./routes/userRoutes');
+const touchpointRouter = require('./routes/touchpointRoutes');
 
 const app = express();
 
@@ -52,6 +53,7 @@ mongoose.connect( DB,
 
 // ROUTES:
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/touchpoints', touchpointRouter)
 
 // ROUTER HANDLER: Catches any routes that were missed.
 app.all('*', (req, res, next) => {
