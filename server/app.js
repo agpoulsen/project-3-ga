@@ -7,6 +7,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 
 const AppError = require('./util/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -48,6 +49,9 @@ app.use(mongoSanitize());
 
 // Data Sanitisation against XSS
 app.use(xss());
+
+// Compresses responses
+app.use(compression());
 
 // DATABASE CONNECTION:
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
